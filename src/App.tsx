@@ -1,7 +1,8 @@
 import { useState } from "react";
 import CriteriaPanel from "./components/CriteriaPanel"
-import type { Criterion } from "./types/decision";
+import type { Criterion, Option } from "./types/decision";
 import { Toaster } from "react-hot-toast";
+import OptionsPanel from "./components/OptionsPanel";
 
 function App() {
 
@@ -21,6 +22,39 @@ function App() {
         name: "New Criterion",
         weight: 0,
         type: "benefit"
+      }
+    ]);
+
+  };
+
+  const [options, setOptions] =
+    useState<Option[]>([
+      {
+        id: "o1", name: "Paris",
+        values: { c1: 1500, c2: 8, c3: 7 }
+      },
+      {
+        id: "o2", name: "Tokyo",
+        values: { c1: 2000, c2: 9, c3: 9 }
+      }
+    ]);
+
+  const addOption = () => {
+
+    const id = `o${Date.now()}`;
+
+    const values: Record<string, number> = {};
+
+    criteria.forEach(c =>
+      values[c.id] = 0
+    );
+
+    setOptions([
+      ...options,
+      {
+        id,
+        name: "New Option",
+        values
       }
     ]);
 
@@ -53,6 +87,47 @@ function App() {
               setCriteria(
                 criteria.filter(
                   c => c.id !== id
+                )
+              )
+            }
+
+          />
+
+          <OptionsPanel
+
+            options={options}
+            criteria={criteria}
+
+            addOption={addOption}
+
+            updateOptionName={(id, name) =>
+              setOptions(
+                options.map(o =>
+                  o.id === id ?
+                    { ...o, name } : o
+                )
+              )
+            }
+
+            updateOptionValue={(o, c, v) =>
+              setOptions(
+                options.map(opt =>
+                  opt.id === o ?
+                    {
+                      ...opt,
+                      values: {
+                        ...opt.values,
+                        [c]: Number(v)
+                      }
+                    } : opt
+                )
+              )
+            }
+
+            deleteOption={(id) =>
+              setOptions(
+                options.filter(
+                  o => o.id !== id
                 )
               )
             }

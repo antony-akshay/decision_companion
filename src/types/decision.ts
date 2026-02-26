@@ -4,3 +4,9 @@ export interface Criterion {
     weight: number;
     type: "benefit" | "cost";
 }
+
+export interface Option {
+    id: string;
+    name: string;
+    values: Record<string, number>;
+}
