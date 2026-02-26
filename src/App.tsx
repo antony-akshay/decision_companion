@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CriteriaPanel from "./components/CriteriaPanel"
 import type { Criterion } from "./types/decision";
+import { Toaster } from "react-hot-toast";
 
 function App() {
 
@@ -62,7 +63,7 @@ function App() {
 
 
       </div>
-
+      <Toaster position="bottom-right" reverseOrder={false} />
     </div>
   )
 }
