@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CriteriaPanel from "./components/CriteriaPanel"
 import type { Criterion, Option } from "./types/decision";
 import { Toaster } from "react-hot-toast";
@@ -59,6 +59,30 @@ function App() {
     ]);
 
   };
+
+  const normalizedCriteria = useMemo(() => {
+
+    const total =
+      criteria.reduce(
+        (s, c) => s + Number(c.weight || 0),
+        0
+      );
+
+    if (total === 0) {
+      return criteria.map(c => ({
+        ...c,
+        weight: 0
+      }));
+    }
+
+    return criteria.map(c => ({
+      ...c,
+      weight: Number(c.weight) / total
+    }));
+
+  }, [criteria]);
+
+  console.log(normalizedCriteria);
 
   return (
 
