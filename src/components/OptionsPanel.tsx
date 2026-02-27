@@ -1,4 +1,6 @@
+import toast from "react-hot-toast";
 import { type Criterion, type Option } from "../types/decision";
+import { useEffect, useRef } from "react";
 
 interface Props {
 
@@ -25,6 +27,52 @@ export default function OptionsPanel({
     updateOptionValue,
     deleteOption
 }: Props) {
+
+    const identicalToastShown = useRef(false);
+
+    useEffect(() => {
+
+        if (options.length < 2) {
+            identicalToastShown.current = false;
+            return;
+        }
+
+        let foundIdentical = false;
+
+        for (let i = 0; i < options.length; i++) {
+            for (let j = i + 1; j < options.length; j++) {
+
+                const optionA = options[i];
+                const optionB = options[j];
+
+                const identicalAcrossCriteria =
+                    criteria.every(c =>
+                        Number(optionA.values[c.id] || 0) ===
+                        Number(optionB.values[c.id] || 0)
+                    );
+
+                if (identicalAcrossCriteria) {
+                    foundIdentical = true;
+                    break;
+                }
+            }
+
+            if (foundIdentical) break;
+        }
+
+        if (foundIdentical) {
+            if (!identicalToastShown.current) {
+                toast(
+                    "Two options have identical values across all criteria. Ranking will result in a tie.",
+                    { icon: "⚖️" }
+                );
+                identicalToastShown.current = true;
+            }
+        } else {
+            identicalToastShown.current = false;
+        }
+
+    }, [options, criteria]);
 
     return (
 
