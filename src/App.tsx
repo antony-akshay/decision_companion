@@ -3,6 +3,8 @@ import CriteriaPanel from "./components/CriteriaPanel"
 import type { Criterion, Option } from "./types/decision";
 import { Toaster } from "react-hot-toast";
 import OptionsPanel from "./components/OptionsPanel";
+import ResultsPanel from "./components/ResultsPanel";
+import { calculateScores, rankOptions } from "./utils/decisionMath";
 
 function App() {
 
@@ -84,6 +86,18 @@ function App() {
 
   console.log(normalizedCriteria);
 
+  const rankedOptions =
+    useMemo(() => {
+
+      return rankOptions(
+        calculateScores(
+          options,
+          normalizedCriteria
+        )
+      );
+
+    }, [options, normalizedCriteria]);
+
   return (
 
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-6">
@@ -158,8 +172,13 @@ function App() {
 
           />
 
-        </div>
 
+
+        </div>
+        <ResultsPanel
+          rankedOptions={rankedOptions}
+
+        />
 
       </div>
       <Toaster position="bottom-right" reverseOrder={false} />

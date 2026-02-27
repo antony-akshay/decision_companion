@@ -10,3 +10,14 @@ export interface Option {
     name: string;
     values: Record<string, number>;
 }
+
+export interface Breakdown {
+    normalized: number;
+    weight: number;
+    contribution: number;
+}
+
+export interface ScoredOption extends Option {
+    score: number;
+    breakdown: Record<string, Breakdown>;
+}
