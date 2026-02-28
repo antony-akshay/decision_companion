@@ -74,6 +74,7 @@ export default function OptionsPanel({
 
     }, [options, criteria]);
 
+
     return (
 
         <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8">

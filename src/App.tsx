@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import CriteriaPanel from "./components/CriteriaPanel"
 import type { Criterion, Option } from "./types/decision";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import OptionsPanel from "./components/OptionsPanel";
 import ResultsPanel from "./components/ResultsPanel";
 import { calculateScores, rankOptions } from "./utils/decisionMath";
@@ -98,7 +98,7 @@ function App() {
 
     }, [options, normalizedCriteria]);
 
-    console.log(rankedOptions)
+  console.log(rankedOptions)
 
   return (
 
@@ -140,14 +140,25 @@ function App() {
 
             addOption={addOption}
 
-            updateOptionName={(id, name) =>
+            updateOptionName={(id, name) => {
+              const normalized = name.trim().toLowerCase();
+
+              const alreadyExists = options.some(
+                o =>
+                  o.id !== id &&
+                  o.name.trim().toLowerCase() === normalized
+              );
+
+              if (alreadyExists) {
+                toast.error("Option name must be unique.");
+              }
+
               setOptions(
                 options.map(o =>
-                  o.id === id ?
-                    { ...o, name } : o
+                  o.id === id ? { ...o, name } : o
                 )
-              )
-            }
+              );
+            }}
 
             updateOptionValue={(o, c, v) =>
               setOptions(

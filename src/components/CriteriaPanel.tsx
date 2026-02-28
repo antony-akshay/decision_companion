@@ -41,6 +41,13 @@ export default function CriteriaPanel({
             Number(criterion.weight) === undefined
     );
 
+    const normalizedNames = criteria.map(c =>
+        c.name.trim().toLowerCase()
+    );
+
+    const hasDuplicateNames =
+        new Set(normalizedNames).size !== normalizedNames.length;
+
     const allWeightsZero = totalWeight === 0;
 
     const weightNotNormalized =
@@ -73,9 +80,9 @@ export default function CriteriaPanel({
             //     );
             //     dominanceToastShown.current = true;
             // }
-        // } else {
-        //     dominanceToastShown.current = false;
-        toast.error(`One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`,)
+            // } else {
+            //     dominanceToastShown.current = false;
+            toast.error(`One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`,)
         }
     }, [
         allWeightsZero,
@@ -153,6 +160,12 @@ export default function CriteriaPanel({
                     <div className="p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm">
                         One criterion dominates {(dominanceRatio * 100).toFixed(0)}% of the decision.
                         Ensure this reflects your true preference.
+                    </div>
+                )}
+
+                {hasDuplicateNames && (
+                    <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
+                        Duplicate criterion names detected. Each criterion must have a unique name.
                     </div>
                 )}
 
