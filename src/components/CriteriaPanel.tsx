@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { type Criterion } from "../types/decision";
 import toast from "react-hot-toast";
 
@@ -70,31 +70,20 @@ export default function CriteriaPanel({
             ? maxWeight / totalWeight
             : 0;
 
+    const dominanceToastShown = useRef(false);
 
     useEffect(() => {
         if (dominanceRatio > 0.75 && totalWeight > 0) {
-            // if (!dominanceToastShown.current) {
-            //     toast(
-            //         `One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`,
-            //         { icon: "⚠" }
-            //     );
-            //     dominanceToastShown.current = true;
-            // }
-            // } else {
-            //     dominanceToastShown.current = false;
-            toast.error(`One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`,)
+            if (!dominanceToastShown.current) {
+                toast.error(
+                    `One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`
+                );
+                dominanceToastShown.current = true;
+            }
+        } else {
+            dominanceToastShown.current = false;
         }
-    }, [
-        allWeightsZero,
-        hasNegativeWeight,
-        hasInvalidWeight,
-        dominanceRatio,
-        totalWeight,
-        criteria.length
-    ]);
-    /* ===============================
-       Render
-    =============================== */
+    }, [dominanceRatio, totalWeight]);
 
 
 
