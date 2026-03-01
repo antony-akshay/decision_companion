@@ -82,26 +82,32 @@ export default function ResultsPanel({
             </table>
 
 
-            {rankedOptions.length != 0 ? topOption && (
+            {rankedOptions.length !== 0 && topOption ? (() => {
 
-                <div className="mt-8 border-t pt-6">
+                return (
+                    <div className="mt-8 border-t pt-6 space-y-3">
 
-                    <h3 className="text-lg font-bold">
+                        <h3 className="text-lg font-bold">
+                            Winner: {topOption.name}
+                        </h3>
 
-                        Winner: {topOption.name}
+                        <p className="text-gray-700">
+                            {topOption.name} achieved the highest overall score of{" "}
+                            <span className="font-bold">
+                                {topOption.score.toFixed(4)}
+                            </span>.
+                        </p>
 
-                    </h3>
+                    </div>
+                );
 
-                </div>
-
-            ) :
+            })() : (
                 <div className="mt-8 pt-6">
                     <h3 className="text-lg font-bold">
-                        no options to evaluate
+                        No options to evaluate
                     </h3>
                 </div>
-
-            }
+            )}
 
         </div>
 

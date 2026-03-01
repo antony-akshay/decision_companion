@@ -25,22 +25,22 @@ export function normalize(
             const raw =
                 Number(o.values[c.id] || 0);
 
-            if (c.type === "benefit") {
-
-                normalized[o.id][c.id] =
-                    max === 0 ? 0 : raw / max;
-
+            if (max === min) {
+                normalized[o.id][c.id] = 1;
             } else {
-
-                normalized[o.id][c.id] =
-                    raw === 0 ? 0 : min / raw;
-
+                if (c.type === "benefit") {
+                    normalized[o.id][c.id] =
+                        (raw - min) / (max - min);
+                } else {
+                    normalized[o.id][c.id] =
+                        (max - raw) / (max - min);
+                }
             }
 
         });
 
     });
-    
+
     return normalized;
 
 }

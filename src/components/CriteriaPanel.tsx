@@ -94,9 +94,37 @@ export default function CriteriaPanel({
 
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                    Criteria
-                </h2>
+                <div className="flex items-center space-x-3">
+
+                    <h2 className="text-2xl font-bold text-gray-800">
+                        Criteria
+                    </h2>
+
+                    {/* Help Tooltip */}
+                    <div className="relative group">
+                        <button
+                            className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-300"
+                        >
+                            ?
+                        </button>
+
+                        <div className="absolute left-8 top-1/2 -translate-y-1/2 w-72 p-3 text-sm bg-gray-900 text-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                            <div className="space-y-2">
+                                <div>
+                                    <strong>Benefit ↑</strong> — Higher values are better.
+                                    <br />
+                                    Example: Profit, Rating, Performance.
+                                </div>
+                                <div>
+                                    <strong>Cost ↓</strong> — Lower values are better.
+                                    <br />
+                                    Example: Price, Risk, Time.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <button
                     onClick={addCriterion}
@@ -208,14 +236,10 @@ export default function CriteriaPanel({
                             </button>
 
                             <button
-                                // disabled={criteria.length <= 1}
                                 onClick={() =>
                                     deleteCriterion(criterion.id)
                                 }
-                                className={`ml-2 p-2 rounded-lg ${criteria.length <= 1
-                                        ? "text-gray-400 cursor-not-allowed"
-                                        : "text-red-500 hover:bg-red-100"
-                                    }`}
+                                className={`ml-2 p-2 rounded-lg text-red-500 hover:bg-red-100`}
                             >
                                 X
                             </button>
