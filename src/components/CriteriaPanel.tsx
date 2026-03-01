@@ -29,7 +29,7 @@ export default function CriteriaPanel({
     );
 
     const hasNegativeWeight = enabledCriteria.some(
-        (criterion) => Number(criterion.weight) < 0
+        (criterion) => Number(criterion.weight) <= 0
     );
 
     const hasInvalidWeight = enabledCriteria.some(
@@ -151,7 +151,7 @@ export default function CriteriaPanel({
 
                 {hasNegativeWeight && (
                     <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
-                        Weights cannot be negative.
+                        Weights cannot be negative or zero.
                     </div>
                 )}
 
