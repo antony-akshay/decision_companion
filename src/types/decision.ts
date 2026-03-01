@@ -3,6 +3,7 @@ export interface Criterion {
     name: string;
     weight: number;
     type: "benefit" | "cost";
+    enabled: boolean;
 }
 
 export interface Option {

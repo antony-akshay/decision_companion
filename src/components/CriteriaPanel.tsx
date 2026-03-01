@@ -8,7 +8,7 @@ interface CriteriaPanelProps {
     updateCriterion: (
         id: string,
         field: keyof Criterion,
-        value: string | number
+        value: string | number | boolean
     ) => void;
     deleteCriterion: (id: string) => void;
 }
@@ -20,22 +20,19 @@ export default function CriteriaPanel({
     deleteCriterion,
 }: CriteriaPanelProps) {
 
-    /* ===============================
-       Derived Validation State
-    =============================== */
+    // Only enabled criteria participate in weight logic
+    const enabledCriteria = criteria.filter(c => c.enabled);
 
-
-
-    const totalWeight = criteria.reduce(
+    const totalWeight = enabledCriteria.reduce(
         (sum, criterion) => sum + Number(criterion.weight || 0),
         0
     );
 
-    const hasNegativeWeight = criteria.some(
+    const hasNegativeWeight = enabledCriteria.some(
         (criterion) => Number(criterion.weight) < 0
     );
 
-    const hasInvalidWeight = criteria.some(
+    const hasInvalidWeight = enabledCriteria.some(
         (criterion) =>
             isNaN(Number(criterion.weight)) ||
             Number(criterion.weight) === undefined
@@ -48,21 +45,22 @@ export default function CriteriaPanel({
     const hasDuplicateNames =
         new Set(normalizedNames).size !== normalizedNames.length;
 
-    const allWeightsZero = totalWeight === 0;
+    const allWeightsZero =
+        enabledCriteria.length > 0 && totalWeight === 0;
 
-    const weightNotNormalized =
-        totalWeight !== 0 &&
-        Math.abs(totalWeight - 1) > 0.001;
+    // const weightNotNormalized =
+    //     totalWeight !== 0 &&
+    //     Math.abs(totalWeight - 1) > 0.001;
 
     const isValidState =
-        criteria.length > 0 &&
+        enabledCriteria.length > 0 &&
         !allWeightsZero &&
         !hasNegativeWeight &&
         !hasInvalidWeight;
 
     const maxWeight =
-        criteria.length > 0
-            ? Math.max(...criteria.map(c => Number(c.weight) || 0))
+        enabledCriteria.length > 0
+            ? Math.max(...enabledCriteria.map(c => Number(c.weight) || 0))
             : 0;
 
     const dominanceRatio =
@@ -76,7 +74,7 @@ export default function CriteriaPanel({
         if (dominanceRatio > 0.75 && totalWeight > 0) {
             if (!dominanceToastShown.current) {
                 toast.error(
-                    `One criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`
+                    `One enabled criterion dominates ${(dominanceRatio * 100).toFixed(0)}% of the decision.`
                 );
                 dominanceToastShown.current = true;
             }
@@ -85,7 +83,11 @@ export default function CriteriaPanel({
         }
     }, [dominanceRatio, totalWeight]);
 
-
+    useEffect(() => {
+        if (enabledCriteria.length === 0) {
+            toast.error("At least one criterion must be enabled.");
+        }
+    }, [enabledCriteria.length]);
 
     return (
         <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8">
@@ -104,19 +106,18 @@ export default function CriteriaPanel({
                 </button>
             </div>
 
-
             {/* Validation Messages */}
             <div className="space-y-3 mb-6">
 
-                {criteria.length === 0 && (
+                {enabledCriteria.length === 0 && (
                     <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
-                        At least one criterion is required.
+                        Enable at least one criterion.
                     </div>
                 )}
 
-                {allWeightsZero && criteria.length > 0 && (
+                {allWeightsZero && (
                     <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
-                        Total weight is 0. Assign weight to at least one criterion.
+                        Total enabled weight is 0.
                     </div>
                 )}
 
@@ -128,38 +129,35 @@ export default function CriteriaPanel({
 
                 {hasInvalidWeight && (
                     <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
-                        Invalid weight detected. Please enter valid numbers.
+                        Invalid weight detected.
                     </div>
                 )}
 
-                {weightNotNormalized && !allWeightsZero && (
+                {/* {weightNotNormalized && !allWeightsZero && (
                     <div className="p-3 rounded-lg bg-yellow-100 text-yellow-700 text-sm">
-                        Total weight is {totalWeight.toFixed(2)}.
-                        Weights will be proportionally rescaled during scoring.
+                        Total enabled weight is {totalWeight.toFixed(2)}.
+                        It will be rescaled automatically.
                     </div>
-                )}
+                )} */}
 
                 {isValidState && (
                     <div className="p-3 rounded-lg bg-green-100 text-green-700 text-sm">
-                        Criteria configuration is valid.
+                        Configuration valid.
                     </div>
                 )}
 
                 {dominanceRatio > 0.75 && totalWeight > 0 && (
                     <div className="p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm">
-                        One criterion dominates {(dominanceRatio * 100).toFixed(0)}% of the decision.
-                        Ensure this reflects your true preference.
+                        One criterion dominates {(dominanceRatio * 100).toFixed(0)}%.
                     </div>
                 )}
 
                 {hasDuplicateNames && (
                     <div className="p-3 rounded-lg bg-red-100 text-red-700 text-sm">
-                        Duplicate criterion names detected. Each criterion must have a unique name.
+                        Duplicate criterion names detected.
                     </div>
                 )}
-
             </div>
-
 
             {/* Criteria List */}
             <div className="space-y-4">
@@ -168,14 +166,19 @@ export default function CriteriaPanel({
 
                     <div
                         key={criterion.id}
-                        className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition"
+                        className={`p-4 rounded-xl border transition
+                            ${criterion.enabled
+                                ? "bg-gradient-to-r from-gray-50 to-blue-50 border-gray-200 hover:shadow-md"
+                                : "bg-gray-100 border-gray-300 opacity-60"
+                            }`}
                     >
 
-                        {/* Name + Delete */}
-                        <div className="flex justify-between mb-3">
+                        {/* Name + Toggle + Delete */}
+                        <div className="flex justify-between items-center mb-3">
 
                             <input
                                 value={criterion.name}
+                                disabled={!criterion.enabled}
                                 onChange={(event) =>
                                     updateCriterion(
                                         criterion.id,
@@ -186,21 +189,37 @@ export default function CriteriaPanel({
                                 className="flex-1 font-semibold text-lg bg-transparent border-none focus:ring-2 focus:ring-blue-500 rounded-lg px-3 py-1 outline-none"
                             />
 
+                            {/* TOGGLE BUTTON */}
                             <button
-                                disabled={criteria.length <= 1}
+                                onClick={() =>
+                                    updateCriterion(
+                                        criterion.id,
+                                        "enabled",
+                                        !criterion.enabled
+                                    )
+                                }
+                                className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${criterion.enabled ? "bg-green-500" : "bg-red-500"
+                                    }`}
+                            >
+                                <span
+                                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${criterion.enabled ? "translate-x-6" : "translate-x-1"
+                                        }`}
+                                />
+                            </button>
+
+                            <button
+                                // disabled={criteria.length <= 1}
                                 onClick={() =>
                                     deleteCriterion(criterion.id)
                                 }
                                 className={`ml-2 p-2 rounded-lg ${criteria.length <= 1
-                                    ? "text-gray-400 cursor-not-allowed"
-                                    : "text-red-500 hover:bg-red-100"
+                                        ? "text-gray-400 cursor-not-allowed"
+                                        : "text-red-500 hover:bg-red-100"
                                     }`}
                             >
                                 X
                             </button>
-
                         </div>
-
 
                         {/* Weight + Type */}
                         <div className="grid grid-cols-2 gap-4">
@@ -215,6 +234,7 @@ export default function CriteriaPanel({
                                     step="0.05"
                                     min="0"
                                     max="1"
+                                    disabled={!criterion.enabled}
                                     value={criterion.weight}
                                     onChange={(event) => {
 
@@ -234,13 +254,13 @@ export default function CriteriaPanel({
                                 />
                             </div>
 
-
                             <div>
                                 <label className="text-sm text-gray-600">
                                     Type
                                 </label>
 
                                 <select
+                                    disabled={!criterion.enabled}
                                     value={criterion.type}
                                     onChange={(event) =>
                                         updateCriterion(
@@ -254,7 +274,6 @@ export default function CriteriaPanel({
                                     <option value="benefit">
                                         Benefit ↑
                                     </option>
-
                                     <option value="cost">
                                         Cost ↓
                                     </option>
@@ -268,7 +287,6 @@ export default function CriteriaPanel({
                 ))}
 
             </div>
-
         </div>
     );
 }

@@ -10,9 +10,9 @@ function App() {
 
   const [criteria, setCriteria] =
     useState<Criterion[]>([
-      { id: "c1", name: "Budget", weight: 0.3, type: "cost" },
-      { id: "c2", name: "Weather", weight: 0.3, type: "benefit" },
-      { id: "c3", name: "Safety", weight: 0.4, type: "benefit" }
+      { id: "c1", name: "Budget", weight: 0.3, type: "cost", enabled: true },
+      { id: "c2", name: "Weather", weight: 0.3, type: "benefit", enabled: true },
+      { id: "c3", name: "Safety", weight: 0.4, type: "benefit", enabled: true }
     ]);
 
   const addCriterion = () => {
@@ -23,7 +23,8 @@ function App() {
         id: `c${Date.now()}`,
         name: "New Criterion",
         weight: 0,
-        type: "benefit"
+        type: "benefit",
+        enabled: true
       }
     ]);
 
@@ -64,20 +65,22 @@ function App() {
 
   const normalizedCriteria = useMemo(() => {
 
+    const enabled = criteria.filter(c => c.enabled);
+
     const total =
-      criteria.reduce(
+      enabled.reduce(
         (s, c) => s + Number(c.weight || 0),
         0
       );
 
     if (total === 0) {
-      return criteria.map(c => ({
+      return enabled.map(c => ({
         ...c,
         weight: 0
       }));
     }
 
-    return criteria.map(c => ({
+    return enabled.map(c => ({
       ...c,
       weight: Number(c.weight) / total
     }));
