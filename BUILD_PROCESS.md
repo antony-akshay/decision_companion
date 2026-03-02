@@ -1,4 +1,6 @@
-## ## BUILD PROCESS ## ## 
+## ## BUILD PROCESS ## ##
+
+[Workspace](https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ)
 
 ## 1. Initial Approach
 
@@ -58,9 +60,7 @@ Rejected because:
 
 I read an article on Multi-Criteria Decision Making (MCDM) methods and understood there are various methods like:
 - AHP  
-- TOPSIS  
-- ELECTRE  
-- PROMETHEE  
+- Integral Linear Programming  
 - Weighted Sum Method  
 
 The documentation was confusing, so I looked into other explanations (used AI to understand the models).
@@ -312,4 +312,6 @@ Focused on User Experience:
 - Dynamic criteria  
 - Score breakdown instead of only final result  
 - Validation messages  
-- Toast warnings  
+- Toast warnings
+
+Most improvements did not come from adding features, but from identifying limitations during testing and reshaping the structure.

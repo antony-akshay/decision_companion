@@ -4,10 +4,10 @@
 
     - went through various decision making models
     - came across integral linear programming,Analytic Hierarchy Process(AHP)
-    - went through a literature survey at first : 
-        "https://apps.dtic.mil/sti/pdfs/ADA630702.pdf"
-        "https://creately.com/guides/rational-decision-making-model/"
-        "https://d1wqtxts1xzle7.cloudfront.net/55281596/ajis-1-1-5-libre.pdf?1513181377=&response-content-disposition=inline%3B+filename%3DA_Survey_on_Multi_Criteria_Decision_Maki.pdf&Expires=1772393843&Signature=LQuh~gWpnBFCJqf93CSYwhjaPxvNzb5Fupzlwwm4v254goX8DQyAypIMbi1NwFMcKFQaIiyAhLC-I0txnX3baO44x0yzOJ8sZ0VeEXYXIWfoizhzcPlqoYNqP3lGDuGdrYFh9zGkjnXF8RDeimmwY7bliDAijTSHYiJPFv-aIqLjlkp7vtp2Gc6g0DBDiYgl4p9Tiev68cZ6mjRVRg23fX38MuE~zQdSMF61etJiMGfjDLJt42-Mg~kwBamLJOmrZDbGTX78eqJ96VNNZsBzVJ3p6lYR-NTyxrZZ4vWpwsEYwE83YoBjxvJuNz3okrOiRKrBvwt1xkEzLcP6pJ6Y0w__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA"
+    - read a literature survey and papers at first : 
+        https://apps.dtic.mil/sti/pdfs/ADA630702.pdf
+        https://creately.com/guides/rational-decision-making-model/
+        https://d1wqtxts1xzle7.cloudfront.net/55281596/ajis-1-1-5-libre.pdf
 
 
 ## 2. Search queries
@@ -16,10 +16,12 @@
     - integral linear programming
     - react host toast doc
     - data normalization methods:
-        - min-max normalization:"https://www.geeksforgeeks.org/machine-learning/data-normalization-in-data-mining/"
+        - min-max normalization: https://www.geeksforgeeks.org/machine-learning/data-normalization-in-data-mining/
     - constraint optimization in linear programming
     - react vite commands
     - install tailwind css in react vite
+    - git commit labels
+    - how human emotions can be included in decision making
 
 ## 3. AI tools used:
     - ChatGPT
@@ -39,11 +41,13 @@
     
     - what if one criteria has bigger value than the others will there be any need for calculating the score
 
-    - what if one criteria is only given a big value doesn't it dominate above the other criterias or what if the user only give input to only one critria leaving the others to be 0 also the same condition right? can we give some rate limit to ensure that the user is not making a false input decision
+    - what if one criteria is only given a big value doesn't it dominate above the other criterias or what if the user only give input to only one criteria leaving the others to be 0 also the same condition right? can we give some rate limit to ensure that the user is not making a false input decision
 
-    -what if the budget of one place is free (0) and other is some value ,should the system choose the free one?how can we categorise criteria like on a trip we try to minimise budget and quality will be choosen as high factor.so how to categorise the critieria values into good and bad
+    - what if the budget of one place is free (0) and other is some value ,should the system choose the free one?how can we categorise criteria like on a trip we try to minimise budget and quality will be choosen as high factor.so how to categorise the critieria values into good and bad
 
-    -all the criteria weight sums up to 1 , so we dont want the user to perform calculation each time he add a new value so i have to normalize the criteria value,can we use min max normalization here
+    - all the criteria weight sums up to 1 , so we dont want the user to perform calculation each time he add a new value so i have to normalize the criteria value,can we use min max normalization here
+
+    - if there are a 100 criteria then the user will have to assign weights to everthing such that it can be summed up to 1 right
 
     - used ai to add some tailwind css to the code for the ui
 
@@ -76,6 +80,10 @@
 
     convert this into switch toggle button
 
+    - how the useRef hook work in react
+
+    - used ai to make the documentation files more readable and fix slight grammar mistakes
+
 ## 5.What I Accepted From AI
 
     - Normalization formula
@@ -85,8 +93,6 @@
     - solution for criteria dominance issue
     - solution for duplicate option names and criteria names
     - added toogling of criteria which allowed the user to determine the importance of each criteria
-    - added validation messages for various scenarios
-    - added validation toasts and warnings
     - switch toggle criteria feature
     - test cases for the system
 
@@ -95,6 +101,17 @@
 
     - AI based scoring
     - overcomplicated mathematical models
-    - Linear programming approach (not suitable for preference ranking)
+    - Integral Linear Programming approach (not suitable for preference ranking)
     - Hardcoded restrictions
     - decimal scaling and z-score normalization logic(too complicated)
+
+## 7. What I Learned
+
+    - Explainability forces cleaner architecture.
+    - Small edge cases reveal system maturity.
+    - Normalization is not just math—it’s about preserving user intent.
+    - UI must communicate logic, not just display numbers.
+    - Validation is a design feature, not a defensive chore.
+
+Most improvements did not come from adding features, but from identifying limitations during testing and reshaping the structure.
+

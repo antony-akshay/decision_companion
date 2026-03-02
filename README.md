@@ -2,7 +2,11 @@
 
 ## WORKSPACE
 
-    https://excalidraw.com/#json=56Z6XltzwwrUIiN9r8Q_T,nW7qxjKw2aYApi8skt430A
+    [Workspace](https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ)
+
+## Live Demo
+
+    [click here](https://decision-companion-olvc68mqv-akshays-projects-a0cbf75f.vercel.app/)
 
 ## 1. Problem Understanding
 
@@ -20,6 +24,8 @@ The system evaluates options using a transparent weighted multi-criteria decisio
 Most real-world decisions are not binary. They involve balancing cost, benefits, trade-offs, and personal priorities.
 
 This system is fully explainable and does not rely on AI scoring.
+
+user needs a decision making system that can help him make a decision based on his preferences and priorities.
 
 ---
 
@@ -88,9 +94,13 @@ This makes the model honest about what the user is optimizing.
 
 I structured the system generically so it can be used for different types of decision-making problems while remaining easy to understand and use.
 
+I added an example of how to use to use the system by making a default decision calculation for travel planning so that the user can understand how to use the system.since it is like a form filling process, it is not intuitive to understand how to use it.
+
 ---
 
 ## 5. System Architecture
+
+[data flow diagram](https://github.com/antony-akshay/decision_companion/blob/main/data_flow_diagram.png)
 
 High-Level Flow:
 
@@ -163,6 +173,7 @@ The system:
 - Identical names for criteria
 - Identical names for options
 - Division by zero in normalization
+- Dominance issue when one criteria has a very high weight
 
 ---
 
@@ -188,3 +199,7 @@ Local development:
 - Better handling of equal-preference scenarios for criteria
 - More explainability and transparency
 - Instead of only showing final scores and contributions, optionally use AI to generate a summary explanation of the decision process for better user understanding
+- the current model is focused on one domain and what if a scenario like "i need to buy a car, a house and a phone at the same time" then various dimensions will be considered.i will try to build a system that can handle such scenarios.
+
+- i will make the system such that user just have to prompt like "i need to make a decision on this subject" and i have now build a system where the user has some options(found by him) available in front of him and sets his priority or needs to evaluate which options suits his need.if i had more time the system will be build such that the user can give a prompt like "i need a laptop for video editing and a price range" and the system sets the criterias which ensures that the user does not leave any criterias behind and options will be filled accordingly by the system (data needed like options and criteria will be outsourced) the data obatined is then evaluated by our algorithm/system to rank the options/decisons
+
