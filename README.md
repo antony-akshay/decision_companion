@@ -2,11 +2,11 @@
 
 ## WORKSPACE
 
-    [Workspace](https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ)
+    https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ
 
 ## Live Demo
 
-    [click here](https://decision-companion-olvc68mqv-akshays-projects-a0cbf75f.vercel.app/)
+    https://decision-companion-olvc68mqv-akshays-projects-a0cbf75f.vercel.app/
 
 ## 1. Problem Understanding
 

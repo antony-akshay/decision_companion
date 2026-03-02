@@ -1,6 +1,6 @@
 ## ## BUILD PROCESS ## ##
 
-[Workspace](https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ)
+https://excalidraw.com/#json=g3HL3d8m0vNKcNY8iKixW,nTMMmolTANQbqA66XVi8gQ
 
 ## 1. Initial Approach
 
